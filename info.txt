@@ -1,0 +1,48 @@
+what is a word search?
+    - square matrix of undefined height/width
+        - int size = height/width
+        - size > 0
+        - min_size = length of longest word
+    - input is a list of words
+        - words are lowercase, and stripped of any special characters
+        - test if word lengths are > 0
+    - all words must be represented in some form
+        - can be sideways, upright, or diagonal
+
+project contents
+    - main file to run tests
+    - Letter object to hold specific characters
+        - member variables:
+            - char data = this character
+            - if letter is part of a word
+                - string letter = word
+    - WordMatrix
+        - member variables:
+            - char[] alphabet
+                - to validate input words
+                - to randomize filler characters in matrix
+            - size = dynamically created height/width
+                - determined by algorithm
+                - min_size = length of longest word
+            - Letter[][] matrix
+                - holds all characters and their data
+        - methods:
+            - fillMatrix
+                - for every value that is null, replace it with a random character from alphabet
+            - printMe
+                - function to show contents
+            - placeWord
+                - not recursive
+                1. randomly choose sideways, upright, or diagonal
+                2. find random row or column to place word
+                    - this step is recursive
+                    - find random placement that will NOT allow any character in word to be out of bounds
+                    - try placing each letter
+                    - if letter at that location is already in a word && letter != currentLetter
+                        - we need to find a new location because we cannot override any currentWords
+                3. test every row and column
+                    - if we cannot place a certain word, expand size of matrix
+                        - then we can place word horizontally or vertically in the new row or columns
+                        - no need to test placement
+            - expandMatrix
+                - will be used to place words that cannot fit already

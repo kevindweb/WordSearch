@@ -1,9 +1,8 @@
 public class Main{
     public static void main(String[] args){
-        String[] words = {"word", "another", "test", "/things"};
-        WordMatrix search = new WordMatrix(listOfWords);
+        String[] words = {"word", "ANother", "test", "thingsnnn"};
+        WordMatrix search = new WordMatrix(words);
 
-        // System.out.println("Here is the word search!!");
-        // search.printMe();
+        search.printMe();
     }
 }

@@ -5,7 +5,7 @@ public class Letter{
 
     public Letter(char letter, String word){
         this.letter = letter;
-            this.word = word;
+        this.word = word;
     }
 
     public Letter(char letter){

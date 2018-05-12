@@ -16,6 +16,8 @@ project contents
             - char data = this character
             - if letter is part of a word
                 - string letter = word
+        - methods
+            - getter methods
     - WordMatrix
         - member variables:
             - char[] alphabet
@@ -34,6 +36,7 @@ project contents
             - placeWord
                 - not recursive
                 1. randomly choose sideways, upright, or diagonal
+                    - add diagonal if everything else works, might complicate things too much
                 2. find random row or column to place word
                     - this step is recursive
                     - find random placement that will NOT allow any character in word to be out of bounds
@@ -46,3 +49,7 @@ project contents
                         - no need to test placement
             - expandMatrix
                 - will be used to place words that cannot fit already
+
+WHAT NEEDS TO BE DONE?
+    - check to make sure we can add the word before adding it
+    - we are having issues where we set letters and don't backtrack before starting over

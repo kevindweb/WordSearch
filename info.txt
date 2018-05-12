@@ -51,5 +51,4 @@ project contents
                 - will be used to place words that cannot fit already
 
 WHAT NEEDS TO BE DONE?
-    - check to make sure we can add the word before adding it
-    - we are having issues where we set letters and don't backtrack before starting over
+    - add diagonal ability

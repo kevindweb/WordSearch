@@ -1,7 +1,7 @@
-testRowimport java.util.*;
+import java.util.*;
 
 public class WordMatrix{
-    private char[] alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    private char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     public Random rand = new Random();
     private List<String> myWords;
     private Letter[][] matrix;
@@ -41,7 +41,7 @@ public class WordMatrix{
     }
 
     private String stripWord(String word){
-        word = word.toLowerCase();
+        word = word.toUpperCase();
         int lengthy = word.length();
         String duplicate = "";
         if(lengthy > 0){
@@ -49,7 +49,7 @@ public class WordMatrix{
                 // loops through characters
                 char letter = word.charAt(i);
                 int ascii = (int) letter;
-                if(ascii > 96 && ascii < 123){
+                if(ascii > 64 && ascii < 91){
                     duplicate += letter;
                 }
             }
@@ -65,7 +65,6 @@ public class WordMatrix{
         int lengthy = word.length();
         int row;
         int col;
-        System.out.println("word: " + word + " size - lengthy + 1: " + (size - lengthy + 1));
         if(orientation == 0){
             // vertical placement
             row = rand.nextInt(size - lengthy + 1);
@@ -82,27 +81,17 @@ public class WordMatrix{
         // first for loop is to test whether word can fit
         for(int i=0; i < lengthy; i++){
             char letter = word.charAt(i);
-            Letter currLetter = matrix[testRow][col];
-            if(!currLetter.isPartOfWord()){
-                Letter ourLetter = new Letter(letter, word);
-                matrix[row][col] = ourLetter;
-            } else if(currLetter.getLetter() == letter && currLetter.isPartOfWord()){
-                // means same letter is already there, don't do anything, we're fine
-            } else if(currLetter.getLetter() == letter && !currLetter.isPartOfWord()){
-                Letter ourLetter = new Letter(letter, word);
-                matrix[row][col] = ourLetter;
-                // place letter with word over letter without word
-            } else{
+            Letter currLetter = matrix[testRow][testCol];
+            if(currLetter.getLetter() != letter && currLetter.isPartOfWord()){
                 // letter inside another word is already here, cannot place letter
-                System.out.println("Couldn't place letter here!");
                 placeWord(word, orientation, 0, 0);
                 // start at first position and try again in order
                 return;
             }
             if(orientation == 0){
-                row++;
+                testRow++;
             } else{
-                col++;
+                testCol++;
             }
         }
         // second is to actually input values
@@ -145,6 +134,27 @@ public class WordMatrix{
         int row = prevRow;
         int col = prevCol;
         int lengthy = word.length();
+        int testRow = row;
+        int testCol = col;
+        // first for loop is to test whether word can fit
+        for(int i=0; i < lengthy; i++){
+            char letter = word.charAt(i);
+            Letter currLetter = matrix[testRow][testCol];
+            if(currLetter.getLetter() != letter && currLetter.isPartOfWord()){
+                // letter inside another word is already here, cannot place letter
+                if(orientation == 0){
+                    placeWord(word, orientation, prevRow, ++prevCol);
+                } else{
+                    placeWord(word, orientation, ++prevRow, prevCol);
+                }
+                return;
+            }
+            if(orientation == 0){
+                testRow++;
+            } else{
+                testCol++;
+            }
+        }
         for(int i=0; i < lengthy; i++){
             char letter = word.charAt(i);
             Letter currLetter = matrix[row][col];
@@ -159,13 +169,11 @@ public class WordMatrix{
                 // place letter with word over letter without word
             } else{
                 // letter inside another word is already here, cannot place letter
-                System.out.println("Couldn't place letter here!");
                 if(orientation == 0){
-                    placeWord(word, orientation, prevRow, prevCol++);
+                    placeWord(word, orientation, prevRow, ++prevCol);
                 } else{
-                    placeWord(word, orientation, prevRow++, prevCol);
+                    placeWord(word, orientation, ++prevRow, prevCol);
                 }
-                // start at first position and try again in order
                 return;
             }
             if(orientation == 0){
@@ -209,6 +217,7 @@ public class WordMatrix{
     }
 
     private void expandMatrix(String wordToAdd){
+        System.out.println("Expanding! " + wordToAdd);
         size++;
         fillMatrix(matrix);
         // now add wordToAdd to expanded matrix

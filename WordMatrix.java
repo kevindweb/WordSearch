@@ -27,6 +27,9 @@ public class WordMatrix{
         }
         size = longest;
         if(size > 0){
+            // means we have non empty values in list
+            Collections.shuffle(myWords);
+            // adds another layer of randomization
             matrix = new Letter[size][size];
             fillMatrix();
             // loop through myWords and placeWord
@@ -258,7 +261,6 @@ public class WordMatrix{
 
     private void expandMatrix(String wordToAdd){
         // no diagonal option for this method
-        System.out.println("Expanding! " + wordToAdd);
         size++;
         fillMatrix(matrix);
         // now add wordToAdd to expanded matrix
@@ -289,7 +291,6 @@ public class WordMatrix{
     }
 
     public void printMe(){
-        System.out.println("Here is the word search!!\n");
         for(int i=0; i < size; i++){
             for(int x=0; x < size; x++){
                 System.out.print(matrix[i][x].getLetter() + " ");

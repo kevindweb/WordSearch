@@ -33,8 +33,6 @@ public class WordMatrix{
             for(String s : myWords){
                 placeWord(s);
             }
-            // placeWord(myWords.get(0));
-            // placeWord(myWords.get(1));
         } else{
             System.out.println("Matrix is empty!");
         }
@@ -61,7 +59,12 @@ public class WordMatrix{
     private void placeWord(String word){
         // places specific word in our matrix
         // go random first, and if it doesn't fit, try positions in order
-        int orientation = rand.nextInt(2);
+        int orientation = rand.nextInt(3);
+        int backwards = rand.nextInt(2);
+        if(backwards == 1){
+            // flip word backwards
+            word = flipWord(word);
+        }
         int lengthy = word.length();
         int row;
         int col;
@@ -70,10 +73,15 @@ public class WordMatrix{
             row = rand.nextInt(size - lengthy + 1);
             col = rand.nextInt(size);
             // starting position of word in matrix
-        } else{
+        } else if(orientation == 1){
             // horizontal placement
             row = rand.nextInt(size);
             // starting position of word in matrix
+            col = rand.nextInt(size - lengthy + 1);
+        } else{
+            // diagonal placement
+            System.out.println("diagonal: " + word);
+            row = rand.nextInt(size - lengthy + 1);
             col = rand.nextInt(size - lengthy + 1);
         }
         int testRow = row;
@@ -90,8 +98,11 @@ public class WordMatrix{
             }
             if(orientation == 0){
                 testRow++;
+            } else if(orientation == 1){
+                testCol++;
             } else{
                 testCol++;
+                testRow++;
             }
         }
         // second is to actually input values
@@ -115,7 +126,10 @@ public class WordMatrix{
             }
             if(orientation == 0){
                 row++;
+            } else if(orientation == 1){
+                col++;
             } else{
+                row++;
                 col++;
             }
         }
@@ -134,6 +148,12 @@ public class WordMatrix{
         int row = prevRow;
         int col = prevCol;
         int lengthy = word.length();
+        if(orientation == 2 && ((prevRow > size - lengthy) || (prevCol > size - lengthy))){
+            // this means that the diagonal will not fit, causing outOfBounds error
+            // avoid error and expand matrix
+            expandMatrix(word);
+            return;
+        }
         int testRow = row;
         int testCol = col;
         // first for loop is to test whether word can fit
@@ -144,14 +164,19 @@ public class WordMatrix{
                 // letter inside another word is already here, cannot place letter
                 if(orientation == 0){
                     placeWord(word, orientation, prevRow, ++prevCol);
-                } else{
+                } else if(orientation == 1){
                     placeWord(word, orientation, ++prevRow, prevCol);
+                } else{
+                    placeWord(word, orientation, ++prevRow, ++prevCol);
                 }
                 return;
             }
             if(orientation == 0){
                 testRow++;
+            } else if(orientation == 1){
+                testCol++;
             } else{
+                testRow++;
                 testCol++;
             }
         }
@@ -171,17 +196,32 @@ public class WordMatrix{
                 // letter inside another word is already here, cannot place letter
                 if(orientation == 0){
                     placeWord(word, orientation, prevRow, ++prevCol);
-                } else{
+                } else if(orientation == 1){
                     placeWord(word, orientation, ++prevRow, prevCol);
+                } else{
+                    placeWord(word, orientation, ++prevRow, ++prevCol);
                 }
                 return;
             }
             if(orientation == 0){
                 row++;
+            } else if(orientation == 1){
+                col++;
             } else{
+                row++;
                 col++;
             }
         }
+    }
+
+    private String flipWord(String word){
+        // flips backwards (ex: flipWord(fish) == hsif)
+        int lengthy = word.length();
+        String duplicate = "";
+        for(int i=(lengthy - 1); i >= 0; i--){
+            duplicate += Character.toString(word.charAt(i));
+        }
+        return duplicate;
     }
 
     private void fillMatrix(){
@@ -217,6 +257,7 @@ public class WordMatrix{
     }
 
     private void expandMatrix(String wordToAdd){
+        // no diagonal option for this method
         System.out.println("Expanding! " + wordToAdd);
         size++;
         fillMatrix(matrix);

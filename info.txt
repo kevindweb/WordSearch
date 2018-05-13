@@ -36,7 +36,6 @@ project contents
             - placeWord
                 - not recursive
                 1. randomly choose sideways, upright, or diagonal
-                    - add diagonal if everything else works, might complicate things too much
                 2. find random row or column to place word
                     - this step is recursive
                     - find random placement that will NOT allow any character in word to be out of bounds
